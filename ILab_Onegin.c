@@ -182,12 +182,12 @@ int string_buffercmp (const void* text_ptr1, const void* text_ptr2)
 
     for(int i = 0; i > -1; i++)
     {
-        if(str1[i] == '\0')
+        if(*str1 == '\0')
         {
             return -1;
         }
 
-        if(str2[i] == '\0')
+        if(*str2 == '\0')
         {
             return 1;
         }

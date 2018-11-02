@@ -20,30 +20,40 @@ typedef struct string
 }string;
 
 
-struct string_buffer string_buffer_create(void);
-struct string_buffer formation (string_buffer);
-string* division (string_buffer*);
-int encoding (void*);
-int string_buffercmp (const void*, const void*);
+struct string_buffer String_buffer_create(void);
+struct string_buffer Formation (string_buffer);
+string* Division (string_buffer*);
+int Encoding (void*);
+int String_buffer_cmp (const void*, const void*);
+int Vice_versa_cmp (const void* , const void*);
+unsigned long Min (unsigned long , unsigned long);
+void* Array_cpy (string*, string_buffer*);
+void Onegin_result (string*,  char**, char**, string_buffer*);
+
+
+
+
 
 //////////////////////
 int main()
 {
-    string_buffer bufpar = string_buffer_create();
-    bufpar = formation(bufpar);
-    string* text = division(&bufpar);
+    string_buffer bufpar = String_buffer_create();
+    bufpar = Formation(bufpar);
 
-    qsort(text, bufpar.nstr, sizeof(char*), string_buffercmp);
+    string* text = Division(&bufpar);
+    char** sort1 = (char**) Array_cpy(text, &bufpar);
 
-    for (int i = 0; i < bufpar.nstr; i++)
-    {
-        printf("%s\n", text[i].str);
-    }
+    qsort(text, bufpar.nstr, sizeof(string), String_buffer_cmp);
+    char** sort_alpha = (char**) Array_cpy(text, &bufpar);
 
+    qsort(text, bufpar.nstr, sizeof(string), Vice_versa_cmp);
 
+    Onegin_result (text, sort1, sort_alpha, &bufpar);
 
     free(bufpar.buf);
     free(text);
+    free(sort1);
+    free(sort_alpha);
 }
 /////////////////////
 
@@ -52,7 +62,7 @@ int main()
 
 
 
-struct string_buffer string_buffer_create(void)
+struct string_buffer String_buffer_create (void)
 {
     string_buffer bufpar;
 
@@ -66,17 +76,19 @@ struct string_buffer string_buffer_create(void)
     if (Onegin == NULL)
     {
         printf("File Onegin can't be opened!\n");
-        exit(1);
+        exit(0);
     }
 
 
     // Finding buf size.
     fseek(Onegin, 0, SEEK_END);
-    bufpar.nchars = (unsigned int)ftell(Onegin);
+    bufpar.nchars = (unsigned int) ftell(Onegin);
 
 
     // Text transfering to buf.
-    bufpar.buf = (char*)calloc(bufpar.nchars, sizeof(char));
+    bufpar.buf = (char*) calloc(bufpar.nchars, sizeof(char));
+
+    if (bufpar.buf == NULL) exit(1);
 
     if (bufpar.buf == NULL) exit(2);
 
@@ -101,7 +113,7 @@ struct string_buffer string_buffer_create(void)
 
 
 
-struct string_buffer formation (struct string_buffer bufpar)
+struct string_buffer Formation (struct string_buffer bufpar)
 {
     bufpar.nstr = 0;
 
@@ -109,6 +121,7 @@ struct string_buffer formation (struct string_buffer bufpar)
     {
         if (bufpar.buf[i] == '\n')
             bufpar.nstr++;
+
         while (bufpar.buf[i] == '\n')
         {
             bufpar.buf[i] = '\0';
@@ -123,7 +136,7 @@ struct string_buffer formation (struct string_buffer bufpar)
 
 
 
-string* division (string_buffer *bufpar)
+string* Division (string_buffer *bufpar)
 {
     struct string* text = (struct stirng*) calloc(bufpar->nstr, sizeof(struct string));
 
@@ -159,7 +172,7 @@ string* division (string_buffer *bufpar)
 
 
 
-int encoding (void* str)
+int Encoding (void* str)
 {
     char alph[] = {"АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюя\n"};
 
@@ -175,7 +188,7 @@ int encoding (void* str)
 
 
 
-int string_buffercmp (const void* struct1_ptr, const void* struct2_ptr)
+int String_buffer_cmp (const void* struct1_ptr, const void* struct2_ptr)
 {
     string* struct_str1 = (string*)struct1_ptr;
     string* struct_str2 = (string*)struct2_ptr;
@@ -195,12 +208,12 @@ int string_buffercmp (const void* struct1_ptr, const void* struct2_ptr)
             return 1;
         }
 
-        while (encoding(str1) == 0) str1++;
-        while (encoding(str2) == 0) str2++;
+        while (Encoding(str1) == 0) str1++;
+        while (Encoding(str2) == 0) str2++;
 
-        if (encoding(str1) != encoding(str2))
+        if (Encoding(str1) != Encoding(str2))
         {
-            return encoding(str1) - encoding(str2);
+            return Encoding(str1) - Encoding(str2);
         }
 
         str1++;
@@ -208,3 +221,95 @@ int string_buffercmp (const void* struct1_ptr, const void* struct2_ptr)
     }
     return 99999;
 }
+
+
+
+
+
+int Vice_versa_cmp (const void* struct1_ptr, const void* struct2_ptr)
+{
+    string* struct_str1 = (string*)struct1_ptr;
+    string* struct_str2 = (string*)struct2_ptr;
+
+    unsigned int len1 = struct_str1->str_len;
+    unsigned int len2 = struct_str2->str_len;
+
+    char* str1 = struct_str1->str + len1 - 1;
+    char* str2 = struct_str2->str + len2 - 1;
+
+    for (int i = 0; i < Min(len1, len2); i++)
+    {
+        while (Encoding(str1) == 0) str1--;
+        while (Encoding(str2) == 0) str2--;
+
+        if (Encoding(str1) != Encoding(str2))
+        {
+            return Encoding(str1) - Encoding(str2);
+        }
+
+        str1--;
+        str2--;
+    }
+    return 99999;
+}
+
+
+
+
+
+unsigned long Min(unsigned long a, unsigned long b)
+{
+    if (a > b) return b;
+
+    return a;
+}
+
+
+
+
+
+void* Array_cpy (string* text, string_buffer* bufpar)
+{
+    char** new_array = (char**) calloc(bufpar->nstr, sizeof(char*));
+
+    if (new_array == NULL) exit(5);
+
+    for (int i = 0; i < bufpar->nstr; i++)
+    {
+        new_array[i] = text[i].str;
+    }
+
+    return new_array;
+}
+
+
+
+
+
+void Onegin_result (string* text, char** sort1, char** sort_alpha, string_buffer* bufpar)
+{
+    FILE* result = fopen ("../Data/Onegin_result.txt", "w");
+
+
+    for (int i = 0; i < bufpar->nstr; i++)
+    {
+        fprintf (result, "%s\n", text[i].str);
+    }
+
+    fprintf (result, "\n\n");
+
+    for (int i = 0; i < bufpar->nstr; i++)
+    {
+        fprintf (result, "%s\n", sort_alpha[i]);
+    }
+
+    fprintf (result, "\n\n");
+
+    for (int i = 0; i < bufpar->nstr; i++)
+    {
+        fprintf (result, "%s\n", sort1[i]);
+    }
+
+    fclose (result);
+}
+

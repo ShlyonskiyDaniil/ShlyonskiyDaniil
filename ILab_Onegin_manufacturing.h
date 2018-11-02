@@ -124,4 +124,5 @@ string* Division (string_buffer* bufpar)
 
     return text;
 }
+
 #endif

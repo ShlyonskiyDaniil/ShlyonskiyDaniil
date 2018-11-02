@@ -16,6 +16,4 @@ typedef struct string
     unsigned int str_len;
 }string;
 
-
-
 #endif

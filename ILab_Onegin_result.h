@@ -40,20 +40,21 @@ void Onegin_result (string* text, char** sort1, char** sort_alpha, string_buffer
 {
     FILE* result = fopen ("../Data/Onegin_result.txt", "w");
 
+    fprintf (result, "--Rhyme sorting:\n\n\n");
 
     for (int i = 0; i < bufpar->nstr; i++)
     {
         fprintf (result, "%s\n", text[i].str);
     }
 
-    fprintf (result, "\n\n");
+    fprintf (result, "\n\n--Alphabet sorting:\n\n\n");
 
     for (int i = 0; i < bufpar->nstr; i++)
     {
         fprintf (result, "%s\n", sort_alpha[i]);
     }
 
-    fprintf (result, "\n\n");
+    fprintf (result, "\n\n--Original:\n\n\n");
 
     for (int i = 0; i < bufpar->nstr; i++)
     {
@@ -62,4 +63,5 @@ void Onegin_result (string* text, char** sort1, char** sort_alpha, string_buffer
 
     fclose (result);
 }
+
 #endif

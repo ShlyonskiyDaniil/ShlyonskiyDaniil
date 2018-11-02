@@ -24,7 +24,7 @@ struct string_buffer string_buffer_create(void);
 struct string_buffer formation (string_buffer);
 string* division (string_buffer*);
 int encoding (void*);
-int string_buffercmp (const void*, const void* );
+int string_buffercmp (const void*, const void*);
 
 //////////////////////
 int main()
@@ -33,7 +33,7 @@ int main()
     bufpar = formation(bufpar);
     string* text = division(&bufpar);
 
-    qsort(text->str, bufpar.nstr, sizeof(char*), string_buffercmp);
+    qsort(text, bufpar.nstr, sizeof(char*), string_buffercmp);
 
     for (int i = 0; i < bufpar.nstr; i++)
     {
@@ -175,10 +175,13 @@ int encoding (void* str)
 
 
 
-int string_buffercmp (const void* text_ptr1, const void* text_ptr2)
+int string_buffercmp (const void* struct1_ptr, const void* struct2_ptr)
 {
-    char* str1 = *(char**) text_ptr1;
-    char* str2 = *(char**) text_ptr2;
+    string* struct_str1 = (string*)struct1_ptr;
+    string* struct_str2 = (string*)struct2_ptr;
+
+    char* str1 = struct_str1->str;
+    char* str2 = struct_str2->str;
 
     for(int i = 0; i > -1; i++)
     {

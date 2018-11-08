@@ -72,10 +72,21 @@ int Vice_versa_cmp (const void* struct1_ptr, const void* struct2_ptr)
     char* str1 = struct_str1->str + len1 - 1;
     char* str2 = struct_str2->str + len2 - 1;
 
-    for (int i = 0; i < Min(len1, len2); i++)
+
+    int j = 0;
+    for (int i = 0; i < Min(len1, len2) && j < Min(len1, len2); i++)
     {
-        while (Encoding(str1) == 0) str1--;
-        while (Encoding(str2) == 0) str2--;
+
+        while (Encoding(str1) == 0)
+        {
+            str1--;
+            i++;
+        }
+        while (Encoding(str2) == 0)
+        {
+            str2--;
+            j++;
+        }
 
         if (Encoding(str1) != Encoding(str2))
         {
@@ -84,6 +95,7 @@ int Vice_versa_cmp (const void* struct1_ptr, const void* struct2_ptr)
 
         str1--;
         str2--;
+        j++;
     }
 
     return NOTINRUSSIAN;
@@ -199,7 +211,7 @@ string* Division (string_buffer* bufpar)
 
             while (bufpar->buf[i] == '\0') i++;
             text[j].str = bufpar->buf + i;
- 
+
             j++;
 
             length = 0;

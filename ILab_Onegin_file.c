@@ -74,7 +74,7 @@ int Vice_versa_cmp (const void* struct1_ptr, const void* struct2_ptr)
 
 
     int j = 0;
-    for (int i = 0; i < Min(len1, len2) && j < Min(len1, len2); i++)
+    for (int i = 0; i < Min(len1, len2) || j < Min(len1, len2); i++)
     {
 
         while (Encoding(str1) == 0)

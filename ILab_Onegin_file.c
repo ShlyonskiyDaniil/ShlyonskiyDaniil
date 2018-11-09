@@ -72,20 +72,16 @@ int Vice_versa_cmp (const void* struct1_ptr, const void* struct2_ptr)
     char* str1 = struct_str1->str + len1 - 1;
     char* str2 = struct_str2->str + len2 - 1;
 
-
-    int j = 0;
-    for (int i = 0; i < Min(len1, len2) || j < Min(len1, len2); i++)
+    while (str1 != struct_str1->str && str2 != struct_str2->str)
     {
-
         while (Encoding(str1) == 0)
         {
             str1--;
-            i++;
         }
+
         while (Encoding(str2) == 0)
         {
             str2--;
-            j++;
         }
 
         if (Encoding(str1) != Encoding(str2))
@@ -95,19 +91,9 @@ int Vice_versa_cmp (const void* struct1_ptr, const void* struct2_ptr)
 
         str1--;
         str2--;
-        j++;
     }
 
     return NOTINRUSSIAN;
-}
-
-
-
-unsigned long Min(unsigned long a, unsigned long b)
-{
-    if (a > b) return b;
-
-    return a;
 }
 
 
